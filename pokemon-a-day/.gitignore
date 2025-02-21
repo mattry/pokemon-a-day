@@ -23,4 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 
-pokemon-a-day/src/service/db.json
+*/db.json
