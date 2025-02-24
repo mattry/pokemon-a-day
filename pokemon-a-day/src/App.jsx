@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import Header from './components/Header'
 import DisplayMon from './components/DisplayMon'
 import { getTodaysMon } from './service/api'
 
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <>
+      <Header />
       <DisplayMon mon = {todaysMon} />
     </>
   )
