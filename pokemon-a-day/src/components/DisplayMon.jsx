@@ -8,14 +8,14 @@ const DisplayMon = ({ mon }) => {
       }
 
     return(
-        <>
         <div id="card">
-            <p>{mon.name}</p>
+            <div id="mon-name">
+                <h1>{mon.name}</h1>
+            </div>
             <div id="image-box">
                 <img src={artworkUrl} alt="A pokemon" />
             </div>
         </div>
-        </>
     )
 }
 
