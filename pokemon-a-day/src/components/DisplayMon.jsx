@@ -2,6 +2,33 @@ import { Card, CardContent, CardMedia, Typography, Box, CardHeader, List, ListIt
 import { useEffect, useRef } from 'react';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
+const generationMap = [
+    { gen: "Gen I", start: 1, end: 151 },
+    { gen: "Gen II", start: 152, end: 251 },
+    { gen: "Gen III", start: 252, end: 386 },
+]
+
+const typeColors = {
+    normal: '#A8A878',
+    fire: '#c43d25',
+    water: '#6890F0',
+    electric: '#F8D030',
+    grass: '#78C850',
+    ice: '#98D8D8',
+    fighting: '#C03028',
+    poison: '#A040A0',
+    ground: '#E0C068',
+    flying: '#A890F0',
+    psychic: '#F85888',
+    bug: '#A8B820',
+    rock: '#B8A038',
+    ghost: '#705898',
+    dragon: '#7038F8',
+    dark: '#705848',
+    steel: '#B8B8D0',
+    fairy: '#F0B6BC',
+};
+
 const DisplayMon = ({ mon }) => {
     const artworkUrl = mon?.sprites?.other?.['official-artwork']?.front_default;
     const type = mon?.types?.map(t => t.type.name) || [];
@@ -12,31 +39,16 @@ const DisplayMon = ({ mon }) => {
         audioRef.current = new Audio(`https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${mon.id}.ogg`);
     }, [mon]);
 
+ 
+    const gen = (() => {
+        if (!mon?.id) return "Unknown Gen";
+        const match = generationMap.find(({ start, end }) => mon.id >= start && mon.id <= end);
+        return match ? match.gen : "Unknown Gen";
+    })();
+
     const playCry = () => {
         if (audioRef.current) audioRef.current.play();
     };
-
-    const typeColors = {
-        normal: '#A8A878',
-        fire: '#c43d25',
-        water: '#6890F0',
-        electric: '#F8D030',
-        grass: '#78C850',
-        ice: '#98D8D8',
-        fighting: '#C03028',
-        poison: '#A040A0',
-        ground: '#E0C068',
-        flying: '#A890F0',
-        psychic: '#F85888',
-        bug: '#A8B820',
-        rock: '#B8A038',
-        ghost: '#705898',
-        dragon: '#7038F8',
-        dark: '#705848',
-        steel: '#B8B8D0',
-        fairy: '#F0B6BC',
-    };
-
 
     const setBackground = (types) => {
         const [type1, type2] = types;
@@ -51,8 +63,6 @@ const DisplayMon = ({ mon }) => {
     };
 
     const background = setBackground(type);
-  
-  
 
     if (!mon) {
         return <Typography>Loading...</Typography>;
@@ -65,8 +75,8 @@ const DisplayMon = ({ mon }) => {
                     margin: 'auto', 
                     boxShadow: 3, 
                     marginTop: '2%',
-                    border: '8px solid gold',
-                    borderRadius: '10px',
+                    border: '10px solid gold',
+                    borderRadius: '15px',
                     backgroundColor: '#0034a3',
                 }}>
                 <CardHeader 
@@ -82,7 +92,7 @@ const DisplayMon = ({ mon }) => {
                         backgroundColor: '#0034a3',
                     }} 
                 />
-                <Box sx={{ border: '1px solid #ccc', borderRadius: 1, mx: 3, my: 2 }}>
+                <Box sx={{ mx: 3, my: 2}} >
                     <CardMedia
                         component="img"
                         height="200"
@@ -94,9 +104,14 @@ const DisplayMon = ({ mon }) => {
                         borderRadius: 1,
                         }}
                     />
+                    <Typography sx={{ color: 'whitesmoke', textAlign: 'right', textTransform: 'capitalize' }}>
+                        {type.map((t) => (
+                            t + " "
+                        ))}
+                    </Typography>
                 </Box>
-                <CardContent sx={{mb: 8}}>
-                    <List sx={{color: 'whitesmoke'}}>
+                <CardContent sx={{ mb: 6, pt: 0 }}>
+                    <List sx={{color: 'whitesmoke', fontSize: '1.25rem'}}>
                         {/* height from API is in decimeters, convert to meters, to feet and inches */}
                         <ListItem>
                         Height: {(() => {
@@ -111,12 +126,10 @@ const DisplayMon = ({ mon }) => {
                         <ListItem>
                             Weight: {(mon.weight * 0.1 * 2.20462).toFixed(1)} lbs.
                         </ListItem>
+                        <ListItem sx={{ textTransform: 'capitalize' }}>
+                            {gen}
+                        </ListItem>
                     </List>
-                {/* {type.map((t, idx) => (
-                    <Typography key={idx} variant="body2" color="text.secondary">
-                        Type: {t}
-                    </Typography>
-                ))} */}
                 </CardContent>
             </Card>
         </>
